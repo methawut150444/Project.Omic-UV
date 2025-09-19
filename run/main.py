@@ -196,7 +196,7 @@ class MainWindow(QWidget):
         # * --------------------------------------------------< Version label >
         self.version_label = QLabel(cfg.meta.version_text, self)
         self.version_label.setFont(label_font3)
-        self.version_label.move(1200, 650)
+        self.version_label.move(1240, 700)
 
         # * --------------------------------------------------< "Exit button" >
         self.exit_btn = QPushButton("X", self)
