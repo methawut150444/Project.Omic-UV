@@ -194,8 +194,7 @@ class MainWindow(QWidget):
         
         # * --------------------------------------------------< Version label >
         self.version_label = QLabel(cfg.meta.version_text, self)
-        self.version_label.setFont(QFont("Prompt", 11))
-        self.version_label.setStyleSheet("color: #666; background: transparent;")
+        self.version_label.setFont(label_font2)
         self.version_label.move(1500, 850)
 
         # * --------------------------------------------------< "Exit button" >

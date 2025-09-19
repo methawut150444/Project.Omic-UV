@@ -52,4 +52,4 @@ EOF
 chmod +x "$DESK_FILE" "$AUTO_FILE"
 
 echo "✅ Update complete. Rebooting..."
-sudo reboot
+# sudo reboot
