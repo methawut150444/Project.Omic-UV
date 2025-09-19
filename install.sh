@@ -3,22 +3,26 @@ set -e
 
 DESKTOP="$HOME/Desktop"
 APP_DIR="$DESKTOP/Project.Omic-UV"
-AUTOSTART="$HOME/.config/autostart"
+AUTOSTART_DIR="$HOME/.config/autostart"
 DESK_FILE="$DESKTOP/OmicUV.desktop"
-AUTO_FILE="$AUTOSTART/omicuv.desktop"
+AUTO_FILE="$AUTOSTART_DIR/omicuv.desktop"
 
-echo "[1/4] Update system"
-sudo apt update && sudo apt upgrade -y
+echo "[1/4] Update package index"
+sudo apt update
 
 echo "[2/4] Install dependencies via apt"
 sudo apt install -y python3 python3-pyqt6 python3-opencv python3-gpiozero python3-picamera2 git
 
-echo "[3/4] Clone repo to Desktop"
-rm -rf "$APP_DIR"
-git clone https://github.com/methawut150444/Project.Omic-UV.git "$APP_DIR"
+echo "[3/4] Ensure repo exists at $APP_DIR"
+mkdir -p "$DESKTOP"
+if [ -d "$APP_DIR/.git" ]; then
+  echo "Repo exists -> skip clone"
+else
+  git clone https://github.com/methawut150444/Project.Omic-UV.git "$APP_DIR"
+fi
 
-echo "[4/4] Setup Desktop & Autostart shortcuts"
-mkdir -p "$AUTOSTART"
+echo "[4/4] Create Desktop & Autostart shortcuts"
+mkdir -p "$AUTOSTART_DIR"
 
 # Desktop shortcut
 cat > "$DESK_FILE" <<EOF
