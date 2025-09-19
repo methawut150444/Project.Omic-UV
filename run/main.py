@@ -58,6 +58,7 @@ class MainWindow(QWidget):
         header_font = QFont("Prompt", 20, QFont.Weight.Bold)
         label_font1  = QFont("Prompt", 18)
         label_font2  = QFont("Prompt", 14)
+        label_font3  = QFont("Prompt", 10)
 
         # * --------------------------------------------------< Header logo >
         lb = QLabel(self)
@@ -194,8 +195,8 @@ class MainWindow(QWidget):
         
         # * --------------------------------------------------< Version label >
         self.version_label = QLabel(cfg.meta.version_text, self)
-        self.version_label.setFont(label_font2)
-        self.version_label.move(1500, 850)
+        self.version_label.setFont(label_font3)
+        self.version_label.move(1200, 650)
 
         # * --------------------------------------------------< "Exit button" >
         self.exit_btn = QPushButton("X", self)
