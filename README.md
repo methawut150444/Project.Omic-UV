@@ -7,8 +7,8 @@
 ## 🚀 First install (for new device)
 
 ```bash
-git clone https://github.com/methawut150444/Project.Omic-UV.git
-cd Project.Omic-UV
+git clone https://github.com/methawut150444/Project.Omic-UV.git ~/Desktop/Project.Omic-UV
+cd ~/Desktop/Project.Omic-UV
 bash install.sh
 ```
 
@@ -17,9 +17,8 @@ bash install.sh
 ## 🔄 Update software
 
 ```bash
-cd ~/Desktop
-rm -rf Project.Omic-UV
-git clone https://github.com/methawut150444/Project.Omic-UV.git
-cd Project.Omic-UV
+cd ~/Desktop/Project.Omic-UV
 bash update.sh
 ```
+
+
