@@ -10,7 +10,7 @@ import cv2, os, csv
 from gpiozero import LED
 from picamera2 import Picamera2
 
-from config import cfg 
+from config import cfg
 
 # todo: ------------------------------< Utilities >------------------------------
 def safe_pixmap(path_str: str) -> QPixmap:
