@@ -4,8 +4,19 @@
 
 ---
 
-## 🚀 ติดตั้งครั้งแรก (สำหรับเครื่องใหม่)
+## 🚀 First install (for new device)
+
 ```bash
 git clone https://github.com/methawut150444/Project.Omic-UV.git
 cd Project.Omic-UV
 bash install.sh
+
+---
+
+## 🔄 Update software
+```bash
+cd ~/Desktop
+rm -rf Project.Omic-UV
+git clone https://github.com/methawut150444/Project.Omic-UV.git
+cd Project.Omic-UV
+bash update.sh
