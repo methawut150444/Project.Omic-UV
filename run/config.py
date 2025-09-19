@@ -25,6 +25,10 @@ class Paths:
     save_logs: Path = SAVE_BASE / "logs"
 
 @dataclass(frozen=True)
+class Meta:
+    version_text: str = "git 1.0"   # * <-- Version software
+
+@dataclass(frozen=True)
 class UI:
     window_title: str = "OMIC UV Light measurement"
     window_w: int = 1600
@@ -72,6 +76,7 @@ class Config:
     processing: Processing = Processing()
     hardware: Hardware = Hardware()
     flags: Flags = Flags()
+    meta: Meta = Meta() 
 
 # * instance พร้อมใช้
 cfg = Config()

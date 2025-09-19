@@ -174,7 +174,7 @@ class MainWindow(QWidget):
         self.led_switch.stateChanged.connect(self.toggle_led)
 
         # * ----------------------------------< "แสงไฟส่องสว่าง" >
-        led_label = QLabel("แสงไฟส่องสว่าง", self)
+        led_label = QLabel("แสงไฟส่องสว่าง", self)
         led_label.setFont(label_font1)
         led_label.move(900, 375)
 
@@ -191,6 +191,12 @@ class MainWindow(QWidget):
             }
         """)
         self.btn.clicked.connect(self.analyze_capture)
+        
+        # * --------------------------------------------------< Version label >
+        self.version_label = QLabel(cfg.meta.version_text, self)
+        self.version_label.setFont(QFont("Prompt", 11))
+        self.version_label.setStyleSheet("color: #666; background: transparent;")
+        self.version_label.move(1500, 850)
 
         # * --------------------------------------------------< "Exit button" >
         self.exit_btn = QPushButton("X", self)
