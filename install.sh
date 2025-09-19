@@ -2,13 +2,15 @@
 set -euo pipefail
 trap 'echo "[ERROR] line $LINENO: command failed" >&2' ERR
 
-# ---------- Resolve paths ----------
+echo "=== OMIC UV Installer (final, no-pip) ==="
+
+# ---------- Resolve paths (Desktop, repo on Desktop) ----------
 if command -v xdg-user-dir >/dev/null 2>&1; then
   DESKTOP="$(xdg-user-dir DESKTOP)"
 else
   DESKTOP="$HOME/Desktop"
 fi
-REPO_DIR="$DESKTOP/Project.Omic-UV"    # ที่อยู่ repo บน Desktop
+REPO_DIR="$DESKTOP/Project.Omic-UV"         # repo target (ตาม README)
 AUTOSTART_DIR="$HOME/.config/autostart"
 AUTOSTART_FILE="$AUTOSTART_DIR/omicuv.desktop"
 DESKTOP_SHORTCUT="$DESKTOP/OmicUV.desktop"
@@ -17,25 +19,25 @@ EXEC_CMD="python3 \"$REPO_DIR/run/main.py\""
 WORK_DIR="\"$REPO_DIR/run\""
 ICON_PATH="\"$REPO_DIR/run/icon/durian.png\""
 
-echo "[1/5] APT dependencies"
+# ---------- 1) System deps via APT (no pip needed) ----------
+echo "[1/4] Install APT dependencies"
 sudo apt update
-sudo apt install -y git python3 python3-pip python3-pyqt6 python3-opencv python3-gpiozero python3-picamera2
+sudo apt install -y \
+  git python3 python3-pip \
+  python3-pyqt6 python3-opencv python3-gpiozero python3-picamera2
 
-echo "[2/5] Clone repo to Desktop (if missing)"
+# ---------- 2) Ensure repo is at ~/Desktop/Project.Omic-UV ----------
+echo "[2/4] Ensure repository exists on Desktop"
 mkdir -p "$DESKTOP"
 if [ ! -d "$REPO_DIR/.git" ]; then
+  echo "Cloning repository to $REPO_DIR"
   git clone https://github.com/methawut150444/Project.Omic-UV.git "$REPO_DIR"
 else
-  echo "Repo exists at '$REPO_DIR' -> skip clone."
+  echo "Repo exists at '$REPO_DIR' — skipping clone."
 fi
 
-echo "[3/5] Python packages"
-python3 -m pip install --upgrade pip
-if [ -f "$REPO_DIR/requirements.txt" ]; then
-  python3 -m pip install -r "$REPO_DIR/requirements.txt" || true
-fi
-
-echo "[4/5] Create/Update autostart"
+# ---------- 3) Create/Update autostart .desktop ----------
+echo "[3/4] Create/Update autostart entry"
 mkdir -p "$AUTOSTART_DIR"
 cat > "$AUTOSTART_FILE" <<EOF
 [Desktop Entry]
@@ -49,7 +51,8 @@ X-GNOME-Autostart-enabled=true
 EOF
 chmod +x "$AUTOSTART_FILE"
 
-echo "[5/5] Fix existing Desktop shortcut (OmicUV.desktop) or create one"
+# ---------- 4) Fix existing desktop shortcut or create one ----------
+echo "[4/4] Fix Desktop shortcut (OmicUV.desktop) or create it"
 if [ -f "$DESKTOP_SHORTCUT" ]; then
   sed -i "s|^Exec=.*|Exec=$EXEC_CMD|" "$DESKTOP_SHORTCUT" || true
   sed -i "s|^Path=.*|Path=$WORK_DIR|" "$DESKTOP_SHORTCUT" || true
@@ -59,4 +62,5 @@ else
 fi
 chmod +x "$DESKTOP_SHORTCUT" 2>/dev/null || true
 
-echo "✅ Install finished. Reboot to start the app automatically."
+echo "✅ Install complete."
+echo "👉 Reboot to auto-start the app. (sudo reboot)"
