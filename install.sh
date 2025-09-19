@@ -52,5 +52,5 @@ EOF
 
 chmod +x "$DESK_FILE" "$AUTO_FILE"
 
-echo "✅ Installation complete. Rebooting..."
+echo "✅ Installation complete. Please reboot..."
 # sudo reboot

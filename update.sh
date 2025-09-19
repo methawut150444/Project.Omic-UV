@@ -51,5 +51,5 @@ EOF
 
 chmod +x "$DESK_FILE" "$AUTO_FILE"
 
-echo "✅ Update complete. Rebooting..."
+echo "✅ Update complete. Please reboot..."
 # sudo reboot
