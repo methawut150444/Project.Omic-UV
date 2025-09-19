@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-# * Directory path 
-BASE_DIR = Path("/home/nfed/Desktop/run")
+# * Directory path  -> ใช้ตำแหน่งไฟล์นี้เป็นฐาน
+BASE_DIR = Path(__file__).resolve().parent  # * = .../Project.Omic-UV/run
 ICON_DIR = BASE_DIR / "icon"
 SAVE_BASE = BASE_DIR / "saved"
 

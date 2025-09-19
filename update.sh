@@ -1,59 +1,32 @@
 #!/bin/bash
-set -euo pipefail
-trap 'echo "[ERROR] line $LINENO: command failed" >&2' ERR
+set -e
 
-# ---------- Resolve paths ----------
-if command -v xdg-user-dir >/dev/null 2>&1; then
-  DESKTOP="$(xdg-user-dir DESKTOP)"
+DESKTOP="$HOME/Desktop"
+APP_DIR="$DESKTOP/Project.Omic-UV"
+AUTOSTART="$HOME/.config/autostart"
+DESK_FILE="$DESKTOP/OmicUV.desktop"
+AUTO_FILE="$AUTOSTART/omicuv.desktop"
+
+echo "[1/3] Update repository"
+if [ -d "$APP_DIR" ]; then
+    cd "$APP_DIR"
+    git pull
 else
-  DESKTOP="$HOME/Desktop"
-fi
-REPO_DIR="$DESKTOP/Project.Omic-UV"
-AUTOSTART_DIR="$HOME/.config/autostart"
-AUTOSTART_FILE="$AUTOSTART_DIR/omicuv.desktop"
-DESKTOP_SHORTCUT="$DESKTOP/OmicUV.desktop"
-
-EXEC_CMD="python3 \"$REPO_DIR/run/main.py\""
-WORK_DIR="\"$REPO_DIR/run\""
-ICON_PATH="\"$REPO_DIR/run/icon/durian.png\""
-
-echo "[1/3] Ensure repo exists then update"
-if [ -d "$REPO_DIR/.git" ]; then
-  git -C "$REPO_DIR" fetch --all
-  git -C "$REPO_DIR" reset --hard origin/main
-else
-  echo "Repo not found at '$REPO_DIR'. Cloning…"
-  git clone https://github.com/methawut150444/Project.Omic-UV.git "$REPO_DIR"
+    git clone https://github.com/methawut150444/Project.Omic-UV.git "$APP_DIR"
+    cd "$APP_DIR"
 fi
 
-echo "[2/3] Refresh autostart entry"
-mkdir -p "$AUTOSTART_DIR"
-if [ -f "$AUTOSTART_FILE" ]; then
-  sed -i "s|^Exec=.*|Exec=$EXEC_CMD|" "$AUTOSTART_FILE" || true
-  sed -i "s|^Path=.*|Path=$WORK_DIR|" "$AUTOSTART_FILE" || true
-  sed -i "s|^Icon=.*|Icon=$ICON_PATH|" "$AUTOSTART_FILE" || true
-else
-  cat > "$AUTOSTART_FILE" <<EOF
-[Desktop Entry]
-Type=Application
-Name=OMIC UV
-Exec=$EXEC_CMD
-Path=$WORK_DIR
-Icon=$ICON_PATH
-Terminal=false
-X-GNOME-Autostart-enabled=true
-EOF
-fi
-chmod +x "$AUTOSTART_FILE"
+echo "[2/3] Ensure dependencies (via apt)"
+sudo apt install -y python3 python3-pyqt6 python3-opencv python3-gpiozero python3-picamera2 git
 
-echo "[3/3] Update Desktop shortcut (OmicUV.desktop) if present, otherwise create"
-if [ -f "$DESKTOP_SHORTCUT" ]; then
-  sed -i "s|^Exec=.*|Exec=$EXEC_CMD|" "$DESKTOP_SHORTCUT" || true
-  sed -i "s|^Path=.*|Path=$WORK_DIR|" "$DESKTOP_SHORTCUT" || true
-  sed -i "s|^Icon=.*|Icon=$ICON_PATH|" "$DESKTOP_SHORTCUT" || true
-else
-  cp "$AUTOSTART_FILE" "$DESKTOP_SHORTCUT" || true
-fi
-chmod +x "$DESKTOP_SHORTCUT" 2>/dev/null || true
+echo "[3/3] Fix Desktop & Autostart shortcuts"
+mkdir -p "$AUTOSTART"
 
-echo "✅ Update done. Reboot to run the latest version."
+sed -i "s|^Exec=.*|Exec=python3 $APP_DIR/run/main.py|" "$DESK_FILE" "$AUTO_FILE" || true
+sed -i "s|^Path=.*|Path=$APP_DIR/run|" "$DESK_FILE" "$AUTO_FILE" || true
+sed -i "s|^Icon=.*|Icon=$APP_DIR/run/icon/durian.png|" "$DESK_FILE" "$AUTO_FILE" || true
+
+chmod +x "$DESK_FILE" "$AUTO_FILE"
+
+echo "✅ Update complete. Rebooting..."
+sudo reboot

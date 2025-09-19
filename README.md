@@ -1,6 +1,8 @@
 # OMIC UV Light Project (Raspberry Pi)
 
-โค้ดสำหรับระบบวัดค่า UV บน Raspberry Pi + Picamera2 + PyQt6
+
+โค้ดสำหรับระบบวัดค่า UV บน Raspberry Pi + Picamera2 + PyQt6  
+ใช้การติดตั้งผ่าน **apt** เท่านั้น (ไม่ต้องใช้ pip)
 
 ---
 
