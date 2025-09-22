@@ -11,7 +11,18 @@ echo "[1/4] Update package index"
 sudo apt update
 
 echo "[2/4] Install dependencies via apt"
-sudo apt install -y python3 python3-pyqt6 python3-opencv python3-gpiozero python3-picamera2 git
+sudo apt install -y python3 python3-pyqt6 python3-opencv python3-gpiozero python3-picamera2 git wget fontconfig
+
+# >>> เพิ่มขั้นตอนติดตั้งฟอนต์ Prompt
+echo "[Extra] Install Prompt font"
+FONTS_DIR="$HOME/.local/share/fonts"
+mkdir -p "$FONTS_DIR"
+
+wget -q https://github.com/google/fonts/raw/main/ofl/prompt/Prompt-Regular.ttf -O "$FONTS_DIR/Prompt-Regular.ttf"
+wget -q https://github.com/google/fonts/raw/main/ofl/prompt/Prompt-Bold.ttf -O "$FONTS_DIR/Prompt-Bold.ttf"
+
+fc-cache -f -v
+# <<< จบส่วนเพิ่มฟอนต์
 
 echo "[3/4] Ensure repo exists at $APP_DIR"
 mkdir -p "$DESKTOP"
