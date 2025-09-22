@@ -58,6 +58,7 @@ class Processing:
     gb_pass_min: float = 0.2            # *   >0.2 และ <= fail_threshold = PASS
     history_len: int = 10
     timer_ms: int = 30                  # *   frame update interval
+    tune: float = 0.08                  # *   ปรับแต่งค่าให้ตรงกับเครื่องมือวัดจริง           
 
 @dataclass(frozen=True)
 class Hardware:

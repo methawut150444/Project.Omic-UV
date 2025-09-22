@@ -309,15 +309,18 @@ class MainWindow(QWidget):
 
 
         # * --------------------------------------------------< Result: โชว์ภาพ Icon ตามCondition >
-        if self.avg_ratio is None:
-            icon_path = str(cfg.paths.icon_ready)
-        else:
-            if self.avg_ratio > cfg.processing.gb_fail_threshold:
+        if self.avg_ratio is not None:
+            AVG = self.avg_ratio - cfg.processing.tune
+            
+            if AVG > cfg.processing.gb_fail_threshold:
                 icon_path = str(cfg.paths.icon_not)
-            elif self.avg_ratio > cfg.processing.gb_pass_min:
+            elif AVG > cfg.processing.gb_pass_min:
                 icon_path = str(cfg.paths.icon_ok)
             else:
                 icon_path = str(cfg.paths.icon_ready)
+
+        else:
+            icon_path = str(cfg.paths.icon_ready)
 
         self.result_icon.setPixmap(safe_pixmap(icon_path).scaled(
             self.result_icon.width(), self.result_icon.height(),
@@ -364,16 +367,19 @@ class MainWindow(QWidget):
                 w.writerow([])
                 w.writerow(["Index", "R", "G", "B", "G/B"])
                 for i, (r, g, b, gb) in enumerate(self.rgb_history, start=1):
-                    w.writerow([i, r, g, b, gb])
+                    w.writerow([i, r, g, b, gb - cfg.processing.tune])
 
-                if self.gb_ratio_list:
-                    avg_ratio_csv = round(sum(self.gb_ratio_list) / len(self.gb_ratio_list), 3)
+                # * AVG (offset)
+                if self.avg_ratio is not None:
+                    AVG = self.avg_ratio - cfg.processing.tune   # ??????????????? update_frame
+                    avg_ratio_csv = round(AVG, 3)
                 else:
                     avg_ratio_csv = "N/A"
+
                 w.writerow([])
-                w.writerow([f"Average G/B (last up to {cfg.processing.history_len})", avg_ratio_csv])
+                w.writerow([f"Average G/B (adjusted, last up to {cfg.processing.history_len})", avg_ratio_csv])
         except Exception as e:
-            print(f"[Save CSV Failed] {e}")
+            print(f"[Save CSV Failed] {e}") 
 
         # * --------------------------------------------------< Show Pop-up >
         msg = QMessageBox(self)
